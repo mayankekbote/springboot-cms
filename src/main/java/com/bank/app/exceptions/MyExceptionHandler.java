@@ -23,6 +23,12 @@ public class MyExceptionHandler {
 
         return new ResponseEntity<Map<String,String>>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> responseNotFoundException(ResourceNotFoundException e){
+        return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+
+    }
 }
 
 

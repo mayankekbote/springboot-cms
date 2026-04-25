@@ -2,10 +2,10 @@ package com.bank.app.services;
 
 import com.bank.app.models.Customer;
 import com.bank.app.repository.CustomerRepository;
+import com.bank.app.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,19 +29,15 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Customer findCustomerById(int id) {
-       Customer customer = customerRepository.findById(id)
-               .orElseThrow(() -> new ResponseStatusException(
-                       HttpStatus.NOT_FOUND,
-                       "Customer not found with id: " + id));
-       return customer;
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
+        return customer;
 
     }
 
     @Override
     public Customer updateCustomer(int id, Customer updatedCustomer) {
-        Customer existingCust = customerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Customer not found with id: " + id));
+        Customer existingCust = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
 
 
         existingCust.setFirstName(updatedCustomer.getFirstName());
@@ -54,9 +50,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public String deleteCustomer(int id) {
-        Customer customer = customerRepository.findById(id).orElseThrow(()-> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Customer not found with id: " + id));
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
 
         customerRepository.delete(customer);
         return "Customer deleted with id: "+id;
