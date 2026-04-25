@@ -2,6 +2,7 @@ package com.bank.app.controllers;
 
 import com.bank.app.models.Customer;
 import com.bank.app.services.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class CustomerController {
     }
 
     @PostMapping("/customers")
-    public ResponseEntity<String> addCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<String> addCustomer(@Valid @RequestBody Customer customer) {
         String status = customerService.addCustomer(customer);
         return ResponseEntity.status(HttpStatus.CREATED).body(status);
     }
@@ -38,7 +39,7 @@ public class CustomerController {
 
     @PutMapping("/customers/{id}")
 
-    public ResponseEntity<Customer> updateCustomer(@PathVariable int id, @RequestBody Customer updatedCustomer) {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable int id,@Valid @RequestBody Customer updatedCustomer) {
         Customer updated = customerService.updateCustomer(id, updatedCustomer);
         return ResponseEntity.ok(updated);
     }
